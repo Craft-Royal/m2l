@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../src/Repository/ReservationRepository.php';
 
 $repository = new ReservationRepository();
 
-$id = $_GET['id'];
+$id = (int) $_GET['id'];
 
 $repository->delete($id);
 

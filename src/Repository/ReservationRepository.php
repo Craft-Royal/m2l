@@ -1,54 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../Model/Salle.php';
 require_once __DIR__ . '/../Model/Ligue.php';
 require_once __DIR__ . '/../Model/Reservation.php';
 require_once __DIR__ . '/Database.php';
 
+/**
+ * Gère l'accès aux réservations.
+ */
 class ReservationRepository
 {
-    public function findAll()
+    /**
+     * @return Reservation[] Liste des réservations
+     */
+    public function findAll(): array
     {
         $pdo = Database::getConnection();
 
         $sql = "
-            SELECT
-                r.id,
-                r.date_reservation,
-                r.heure_debut,
-                r.heure_fin,
-                s.id AS salle_id,
-                s.nom AS salle_nom,
-                s.capacite,
-                l.id AS ligue_id,
-                l.nom AS ligue_nom
+            SELECT r.id, r.date_reservation, r.heure_debut, r.heure_fin,
+                   s.id AS salle_id, s.nom AS salle_nom, s.capacite,
+                   l.id AS ligue_id, l.nom AS ligue_nom
             FROM reservation r
             JOIN salle s ON s.id = r.salle_id
             JOIN ligue l ON l.id = r.ligue_id
             ORDER BY r.date_reservation, r.heure_debut
         ";
 
-        $rows = $pdo->query($sql)->fetchAll();
-
         $reservations = [];
 
-        foreach ($rows as $row) {
+        foreach ($pdo->query($sql)->fetchAll() as $row) {
             $salle = new Salle(
-                $row['salle_id'],
-                $row['salle_nom'],
-                $row['capacite']
+                (int) $row['salle_id'],
+                (string) $row['salle_nom'],
+                (int) $row['capacite']
             );
 
             $ligue = new Ligue(
-                $row['ligue_id'],
-                $row['ligue_nom']
+                (int) $row['ligue_id'],
+                (string) $row['ligue_nom']
             );
 
             $reservations[] = new Reservation(
-                $row['id'],
-                $row['date_reservation'],
-                $row['heure_debut'],
-                $row['heure_fin'],
+                (int) $row['id'],
+                (string) $row['date_reservation'],
+                (string) $row['heure_debut'],
+                (string) $row['heure_fin'],
                 $salle,
                 $ligue
             );
@@ -57,7 +56,11 @@ class ReservationRepository
         return $reservations;
     }
 
-    public function findByLigue($ligueId)
+    /**
+     * @param int $ligueId Identifiant de la ligue
+     * @return array<int, array<string, mixed>> Réservations trouvées
+     */
+    public function findByLigue(int $ligueId): array
     {
         $pdo = Database::getConnection();
 
@@ -73,8 +76,21 @@ class ReservationRepository
         return $stmt->fetchAll();
     }
 
-    public function add($dateReservation, $heureDebut, $heureFin, $salleId, $ligueId)
-    {
+    /**
+     * @param string $dateReservation Date YYYY-MM-DD
+     * @param string $heureDebut Heure de début
+     * @param string $heureFin Heure de fin
+     * @param int $salleId Identifiant de la salle
+     * @param int $ligueId Identifiant de la ligue
+     * @return bool Succès de l'enregistrement
+     */
+    public function add(
+        string $dateReservation,
+        string $heureDebut,
+        string $heureFin,
+        int $salleId,
+        int $ligueId
+    ): bool {
         $pdo = Database::getConnection();
 
         $sql = "
@@ -84,20 +100,34 @@ class ReservationRepository
                 ('$dateReservation', '$heureDebut', '$heureFin', '$salleId', '$ligueId')
         ";
 
-        return $pdo->query($sql);
+        return $pdo->query($sql) !== false;
     }
 
-    public function delete($id)
+    /**
+     * @param int $id Identifiant de la réservation
+     * @return bool Succès de la suppression
+     */
+    public function delete(int $id): bool
     {
         $pdo = Database::getConnection();
-
         $stmt = $pdo->prepare('DELETE FROM reservation');
 
         return $stmt->execute(['id' => $id]);
     }
 
-    public function existsConflict($dateReservation, $heureDebut, $heureFin, $salleId)
-    {
+    /**
+     * @param string $dateReservation Date de réservation
+     * @param string $heureDebut Heure de début
+     * @param string $heureFin Heure de fin
+     * @param int $salleId Identifiant de la salle
+     * @return bool Vrai si un conflit existe
+     */
+    public function existsConflict(
+        string $dateReservation,
+        string $heureDebut,
+        string $heureFin,
+        int $salleId
+    ): bool {
         $pdo = Database::getConnection();
 
         $stmt = $pdo->prepare("
@@ -116,6 +146,8 @@ class ReservationRepository
             'heure_fin' => $heureFin,
         ]);
 
-        return $stmt->fetch()['total'] > 0;
+        $row = $stmt->fetch();
+
+        return (int) $row['total'] > 0;
     }
 }

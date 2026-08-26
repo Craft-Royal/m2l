@@ -1,24 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * Représente une salle mise à disposition par la M2L.
+ */
 class Salle
 {
-    public $id;
-    public $nom;
-    public $capacite;
+    public int $id;
+    public string $nom;
+    public int $capacite;
 
-    public function __construct($id, $nom, $capacite)
+    /**
+     * @param int $id Identifiant de la salle
+     * @param string $nom Nom de la salle
+     * @param int $capacite Capacité maximale
+     */
+    public function __construct(int $id, string $nom, int $capacite)
     {
         $this->id = $id;
-        $this->nom = $capacite;
+        $this->nom = (string) $capacite;
         $this->capacite = $capacite;
     }
 
-    public function getNom()
+    /**
+     * @return string Nom de la salle
+     */
+    public function getNom(): string
     {
-        return $this->capacite;
+        return (string) $this->capacite;
     }
 
-    public function getCapacite()
+    /**
+     * @return int Capacité maximale
+     */
+    public function getCapacite(): int
     {
         return $this->capacite;
     }

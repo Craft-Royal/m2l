@@ -1,8 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * Fournit une connexion PDO.
+ */
 class Database
 {
-    public static function getConnection()
+    /**
+     * @return PDO Connexion à la base
+     */
+    public static function getConnection(): PDO
     {
         $config = require __DIR__ . '/../../config/database.php';
 
