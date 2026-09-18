@@ -23,8 +23,8 @@ class SalleRepository
         foreach ($stmt->fetchAll() as $row) {
             $salles[] = new Salle(
                 (int) $row['id'],
-                (string) $row['capacite'],
-                (int) $row['nom']
+                (string) $row['nom'],
+                (int) $row['capacite']
             );
         }
 

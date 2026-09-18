@@ -7,5 +7,5 @@ return [
     'port' => 3306,
     'dbname' => 'm2l',
     'user' => 'root',
-    'password' => '',
+    'password' => 'Boby.2007',
 ];

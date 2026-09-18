@@ -14,7 +14,7 @@ $salles = $repository->findAll();
 <p><a href="index.php">Retour</a></p>
 <ul>
     <?php foreach ($salles as $salle): ?>
-        <li><?= $salle['nom'] ?> — capacité : <?= $salle['capacite'] ?></li>
+        <li><?= $salle->getNom() ?> — capacité : <?= $salle->getCapacite() ?></li>
     <?php endforeach; ?>
 </ul>
 </body>

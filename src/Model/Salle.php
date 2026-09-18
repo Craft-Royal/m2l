@@ -19,7 +19,7 @@ class Salle
     public function __construct(int $id, string $nom, int $capacite)
     {
         $this->id = $id;
-        $this->nom = (string) $capacite;
+        $this->nom = $nom;
         $this->capacite = $capacite;
     }
 
@@ -28,7 +28,7 @@ class Salle
      */
     public function getNom(): string
     {
-        return (string) $this->capacite;
+        return $this->nom;
     }
 
     /**
