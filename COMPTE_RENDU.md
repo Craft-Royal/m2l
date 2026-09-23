@@ -19,16 +19,16 @@ Un tableau avec le nom des salles et la capacité de chacune.
 ## 2. Diagnostic
 
 ### Parcours des données
-...
+parcours de la classe salle et du script php salle et du Repo salle
 
 ### Hypothèse
-...
+Certaines variables devait être mal rédigé dans le code
 
 ### Vérification avec le débogueur
-...
+Pas fait
 
 ### Cause identifiée
-...
+Variables mal nommé ou mal inséré dans le code 
 
 ## 3. Correction
 
@@ -47,7 +47,7 @@ Le nom des paramètres était inversé
 ## 4. Tests
 
 | Test | Résultat attendu | Résultat obtenu |
-| Ouvrir la page |  |  |
+|------|------------------|-----------------|
 | Ouverture de la page Salles | Aucun message d’erreur | |
 | Affichage des noms | Noms conformes à la BDD | |
 | Affichage des capacités | Capacités conformes à la BDD | |
@@ -61,7 +61,7 @@ Le nom des paramètres était inversé
 
 | N° | Problème constaté | Correction apportée | Commit |
 |---|---|---|---|
-| 1 | On ne peut pas accèder aux salles | | |
+| 1 | On ne peut pas accèder aux salles | Les salles sont maintenant visible | |
 | 2 | La page Nouvelle réservation ne s'ouvre pas | | |
 | 3 | Annuler réservation ne s'ouvre pas | | |
 | 4 | | | |
