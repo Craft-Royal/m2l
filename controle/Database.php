@@ -2,28 +2,21 @@
 
 declare(strict_types=1);
 
-/**
- * Fournit une connexion PDO.
- */
-class Database
+require_once __DIR__ . '/Ligue.php';
+require_once __DIR__ . '/Database.php';
+
+class LigueRepository
 {
-    /**
-     * @return PDO Connexion à la base
-     */
-    public static function getConnection(): PDO
+    public function findAll(): array
     {
-        $config = require __DIR__ . '/../config/database.php';
+        $pdo = Database::getConnection();
+        $stmt = $pdo->query('SELECT id, nom FROM ligue ORDER BY nom');
 
-        $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset=utf8mb4";
+        $ligues = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $ligues[] = new Ligue((int) $row['id'], (string) $row['nom']);
+        }
 
-        return new PDO(
-            $dsn,
-            $config['user'],
-            $config['password'],
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ]
-        );
+        return $ligues;
     }
 }

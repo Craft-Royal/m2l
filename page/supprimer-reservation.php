@@ -6,9 +6,11 @@ require_once __DIR__ . '/../controle/ReservationRepository.php';
 
 $repository = new ReservationRepository();
 
-$id = (int) $_GET['id'];
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = (int) $_GET['id'];
+    $repository->delete($id);
+}
 
-$repository->delete($id);
-
-header('Location: index.php');
+// Redirection vers la liste des réservations
+header('Location: index.php?route=reservations');
 exit;

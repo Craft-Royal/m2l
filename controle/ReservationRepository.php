@@ -7,14 +7,8 @@ require_once __DIR__ . '/Ligue.php';
 require_once __DIR__ . '/Reservation.php';
 require_once __DIR__ . '/Database.php';
 
-/**
- * Gère l'accès aux réservations.
- */
 class ReservationRepository
 {
-    /**
-     * @return Reservation[] Liste des réservations
-     */
     public function findAll(): array
     {
         $pdo = Database::getConnection();
@@ -56,18 +50,15 @@ class ReservationRepository
         return $reservations;
     }
 
-    /**
-     * @param int $ligueId Identifiant de la ligue
-     * @return array<int, array<string, mixed>> Réservations trouvées
-     */
     public function findByLigue(int $ligueId): array
     {
         $pdo = Database::getConnection();
 
+        // CORRECTION : Filtre sur r.ligue_id (et non salle_id)
         $stmt = $pdo->prepare("
             SELECT r.*
             FROM reservation r
-            WHERE r.salle_id = :ligue_id
+            WHERE r.ligue_id = :ligue_id
             ORDER BY r.date_reservation
         ");
 
@@ -76,14 +67,6 @@ class ReservationRepository
         return $stmt->fetchAll();
     }
 
-    /**
-     * @param string $dateReservation Date YYYY-MM-DD
-     * @param string $heureDebut Heure de début
-     * @param string $heureFin Heure de fin
-     * @param int $salleId Identifiant de la salle
-     * @param int $ligueId Identifiant de la ligue
-     * @return bool Succès de l'enregistrement
-     */
     public function add(
         string $dateReservation,
         string $heureDebut,
@@ -93,35 +76,32 @@ class ReservationRepository
     ): bool {
         $pdo = Database::getConnection();
 
-        $sql = "
+        // CORRECTION : Requête préparée sécurisée
+        $stmt = $pdo->prepare("
             INSERT INTO reservation
                 (date_reservation, heure_debut, heure_fin, salle_id, ligue_id)
             VALUES
-                ('$dateReservation', '$heureDebut', '$heureFin', '$salleId', '$ligueId')
-        ";
+                (:date_reservation, :heure_debut, :heure_fin, :salle_id, :ligue_id)
+        ");
 
-        return $pdo->query($sql) !== false;
+        return $stmt->execute([
+            'date_reservation' => $dateReservation,
+            'heure_debut' => $heureDebut,
+            'heure_fin' => $heureFin,
+            'salle_id' => $salleId,
+            'ligue_id' => $ligueId
+        ]);
     }
 
-    /**
-     * @param int $id Identifiant de la réservation
-     * @return bool Succès de la suppression
-     */
     public function delete(int $id): bool
     {
         $pdo = Database::getConnection();
-        $stmt = $pdo->prepare('DELETE FROM reservation');
+        // CORRECTION CRITIQUE : Ajout du WHERE id = :id pour éviter d'effacer toute la base
+        $stmt = $pdo->prepare('DELETE FROM reservation WHERE id = :id');
 
         return $stmt->execute(['id' => $id]);
     }
 
-    /**
-     * @param string $dateReservation Date de réservation
-     * @param string $heureDebut Heure de début
-     * @param string $heureFin Heure de fin
-     * @param int $salleId Identifiant de la salle
-     * @return bool Vrai si un conflit existe
-     */
     public function existsConflict(
         string $dateReservation,
         string $heureDebut,
@@ -129,14 +109,13 @@ class ReservationRepository
         int $salleId
     ): bool {
         $pdo = Database::getConnection();
-
         $stmt = $pdo->prepare("
             SELECT COUNT(*) AS total
             FROM reservation
             WHERE date_reservation = :date_reservation
               AND salle_id = :salle_id
-              AND heure_debut >= :heure_debut
-              AND heure_fin <= :heure_fin
+              AND heure_debut < :heure_fin
+              AND heure_fin > :heure_debut
         ");
 
         $stmt->execute([

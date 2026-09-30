@@ -2,33 +2,83 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../controle/ReservationRepository.php';
+$route = $_GET['route'] ?? 'reservations';
 
-$repository = new ReservationRepository();
-$reservations = $repository->findAll();
-?><!doctype html>
-<html lang="fr">
-<head><meta charset="utf-8"><title>M2L - Réservations</title></head>
-<body>
-<h1>Maison des Ligues — Réservation de salles</h1>
-<nav>
-    <a href="index.php">Réservations</a> |
-    <a href="../page/salles.php">Salles</a> |
-    <a href="../page/nouvelle-reservation.php">Nouvelle réservation</a> |
-    <a href="../page/recherche.php">Recherche</a>
-</nav>
-<hr>
-<table border="1" cellpadding="6">
-    <tr><th>Date</th><th>Créneau</th><th>Salle</th><th>Ligue</th><th>Action</th></tr>
-    <?php foreach ($reservations as $reservation): ?>
-        <tr>
-            <td><?= $reservation->dateReservation ?></td>
-            <td><?= $reservation->getCreneau() ?></td>
-            <td><?= $reservation->salle->getNom() ?></td>
-            <td><?= $reservation->ligue->getNom() ?></td>
-            <td><a href="../page/supprimer-reservation.php?id=<?= $reservation->id ?>">Annuler</a></td>
-        </tr>
-    <?php endforeach; ?>
-</table>
-</body>
-</html>
+switch ($route) {
+    case 'reservations':
+        require_once __DIR__ . '/../controle/ReservationRepository.php';
+        $repository = new ReservationRepository();
+        $reservations = $repository->findAll();
+
+        require_once __DIR__ . '/../page/reservationsPage.php';
+        break;
+
+    case 'supprimer-reservation':
+        require_once __DIR__ . '/../controle/ReservationRepository.php';
+        $repository = new ReservationRepository();
+
+        $id = (int) $_GET['id'];
+        $repository->delete($id);
+
+        header('Location: index.php?route=reservations');
+        exit;
+
+    case 'nouvelle-reservation':
+        require_once __DIR__ . '/../controle/SalleRepository.php';
+        require_once __DIR__ . '/../controle/LigueRepository.php';
+
+        $salles = (new SalleRepository())->findAll();
+        $ligues = (new LigueRepository())->findAll();
+
+        require_once __DIR__ . '/../page/nouvelleReservationPage.php';
+        break;
+
+    case 'enregistrer-reservation':
+        require_once __DIR__ . '/../controle/ReservationRepository.php';
+        $repository = new ReservationRepository();
+
+        $date = $_POST['date'];
+        $heureDebut = $_POST['heure_debut'];
+        $heureFin = $_POST['heure_fin'];
+        $salleId = (int) $_POST['salle_id'];
+        $ligueId = (int) $_POST['ligue_id'];
+
+        if ($repository->existsConflict($date, $heureDebut, $heureFin, $salleId)) {
+            die('Cette salle est déjà réservée sur ce créneau.');
+        }
+
+        $repository->add($date, $heureDebut, $heureFin, $salleId, $ligueId);
+
+        header('Location: index.php?route=reservations');
+        exit;
+
+    case 'salles':
+        require_once __DIR__ . '/../controle/SalleRepository.php';
+        $repository = new SalleRepository();
+        $salles = $repository->findAll();
+
+        require_once __DIR__ . '/../page/sallesPage.php';
+        break;
+
+    case 'recherche':
+        require_once __DIR__ . '/../controle/LigueRepository.php';
+        require_once __DIR__ . '/../controle/ReservationRepository.php';
+
+        $ligues = (new LigueRepository())->findAll();
+        $repository = new ReservationRepository();
+        $resultats = [];
+
+        if (isset($_GET['ligue_id'])) {
+            $resultats = $repository->findByLigue((int) $_GET['ligue_id']);
+        }
+
+        require_once __DIR__ . '/../page/recherchePage.php';
+        break;
+
+    default:
+        http_response_code(404);
+        require_once __DIR__ . '/../template/header.php';
+        echo "<h2>404 - Page non trouvée</h2>";
+        require_once __DIR__ . '/../template/footer.php';
+        break;
+}
