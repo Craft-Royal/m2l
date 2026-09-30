@@ -1,7 +1,7 @@
 <?php
 $reservations = $reservations ?? [];
 
-require_once __DIR__ . '/../template/header.php';
+require_once __DIR__ . '/template/header.php';
 ?>
 
     <h2>Liste des réservations</h2>
@@ -29,4 +29,4 @@ require_once __DIR__ . '/../template/header.php';
     </table>
 <?php endif; ?>
 
-<?php require_once __DIR__ . '/../template/footer.php'; ?>
+<?php require_once __DIR__ . '/template/footer.php'; ?>

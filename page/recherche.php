@@ -1,4 +1,10 @@
-<?php require_once __DIR__ . '/../template/header.php'; ?>
+<?php
+
+$ligues = $ligues ?? [];
+
+$resultats = $resultats ?? [];
+
+require_once __DIR__ . '/template/header.php'; ?>
 
     <h2>Recherche des réservations</h2>
 
@@ -21,4 +27,4 @@
     </ul>
 <?php endif; ?>
 
-<?php require_once __DIR__ . '/../template/footer.php'; ?>
+<?php require_once __DIR__ . '/template/footer.php'; ?>

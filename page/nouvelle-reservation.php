@@ -1,4 +1,9 @@
-<?php require_once __DIR__ . '/../template/header.php'; ?>
+<?php
+$salles = $salles ?? [];
+
+$ligues = $ligues ?? [];
+
+require_once __DIR__ . '/template/header.php'; ?>
 
     <h2>Nouvelle réservation</h2>
 
@@ -21,4 +26,4 @@
         <button type="submit">Réserver</button>
     </form>
 
-<?php require_once __DIR__ . '/../template/footer.php'; ?>
+<?php require_once __DIR__ . '/template/footer.php'; ?>

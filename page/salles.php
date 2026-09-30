@@ -1,4 +1,8 @@
-<?php require_once __DIR__ . '/../template/header.php'; ?>
+<?php
+
+$salles = $salles ?? [];
+
+require_once __DIR__ . '/template/header.php'; ?>
 
     <h2>Salles disponibles</h2>
 
@@ -8,4 +12,4 @@
         <?php endforeach; ?>
     </ul>
 
-<?php require_once __DIR__ . '/../template/footer.php'; ?>
+<?php require_once __DIR__ . '/template/footer.php'; ?>

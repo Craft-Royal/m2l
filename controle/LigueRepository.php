@@ -16,7 +16,7 @@ class LigueRepository
     public function findAll(): array
     {
         $pdo = Database::getConnection();
-        $stmt = $pdo->query('SELECT id, nom FROM ligue ORDER BY libelle');
+        $stmt = $pdo->query('SELECT id, nom FROM ligue ORDER BY nom');
 
         $ligues = [];
 

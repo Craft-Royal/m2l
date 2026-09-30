@@ -96,7 +96,6 @@ class ReservationRepository
     public function delete(int $id): bool
     {
         $pdo = Database::getConnection();
-        // CORRECTION CRITIQUE : Ajout du WHERE id = :id pour éviter d'effacer toute la base
         $stmt = $pdo->prepare('DELETE FROM reservation WHERE id = :id');
 
         return $stmt->execute(['id' => $id]);

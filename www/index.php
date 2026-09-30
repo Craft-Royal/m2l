@@ -77,8 +77,8 @@ switch ($route) {
 
     default:
         http_response_code(404);
-        require_once __DIR__ . '/../template/header.php';
+        require_once __DIR__ . '/../page/template/header.php';
         echo "<h2>404 - Page non trouvée</h2>";
-        require_once __DIR__ . '/../template/footer.php';
+        require_once __DIR__ . '/../page/template/footer.php';
         break;
 }
