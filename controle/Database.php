@@ -12,7 +12,7 @@ class Database
      */
     public static function getConnection(): PDO
     {
-        $config = require __DIR__ . '/config/database.php';
+        $config = require __DIR__ . '/../config/database.php';
 
         $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset=utf8mb4";
 
