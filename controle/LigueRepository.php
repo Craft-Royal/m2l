@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../Model/Ligue.php';
+require_once __DIR__ . '/Ligue.php';
 require_once __DIR__ . '/Database.php';
 
 /**
