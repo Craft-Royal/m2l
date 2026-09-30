@@ -10,7 +10,7 @@ switch ($route) {
         $repository = new ReservationRepository();
         $reservations = $repository->findAll();
 
-        require_once __DIR__ . '/../page/reservationsPage.php';
+        require_once __DIR__ . '/../page/enregistrer-reservation.php';
         break;
 
     case 'supprimer-reservation':
@@ -30,7 +30,7 @@ switch ($route) {
         $salles = (new SalleRepository())->findAll();
         $ligues = (new LigueRepository())->findAll();
 
-        require_once __DIR__ . '/../page/nouvelleReservationPage.php';
+        require_once __DIR__ . '/../page/nouvelle-reservation.php';
         break;
 
     case 'enregistrer-reservation':
@@ -57,7 +57,7 @@ switch ($route) {
         $repository = new SalleRepository();
         $salles = $repository->findAll();
 
-        require_once __DIR__ . '/../page/sallesPage.php';
+        require_once __DIR__ . '/../page/salles.php';
         break;
 
     case 'recherche':
@@ -72,7 +72,7 @@ switch ($route) {
             $resultats = $repository->findByLigue((int) $_GET['ligue_id']);
         }
 
-        require_once __DIR__ . '/../page/recherchePage.php';
+        require_once __DIR__ . '/../page/recherche.php';
         break;
 
     default:
