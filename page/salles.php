@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../src/Repository/SalleRepository.php';
+require_once __DIR__ . '/../controle/SalleRepository.php';
 
 $repository = new SalleRepository();
 $salles = $repository->findAll();

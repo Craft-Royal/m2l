@@ -40,9 +40,9 @@ fix: correction recherche par ligue
 ## Installation
 
 1. Créer une base `m2l`.
-2. Exécuter `sql/schema.sql`.
-3. Exécuter `sql/data.sql`.
-4. Modifier les paramètres dans `config/database.php`.
+2. Exécuter `data/schema.sql`.
+3. Exécuter `data/data.sql`.
+4. Modifier les paramètres dans `controle/database.php`.
 5. Lancer le serveur PHP depuis la racine :
 
 ```bash
