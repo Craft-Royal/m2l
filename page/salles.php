@@ -11,7 +11,7 @@ $salles = $repository->findAll();
 <head><meta charset="utf-8"><title>M2L - Salles</title></head>
 <body>
 <h1>Salles disponibles</h1>
-<p><a href="index.php">Retour</a></p>
+<p><a href="../www/index.php">Retour</a></p>
 <ul>
     <?php foreach ($salles as $salle): ?>
         <li><?= $salle->getNom() ?> — capacité : <?= $salle->getCapacite() ?></li>

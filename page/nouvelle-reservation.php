@@ -12,7 +12,7 @@ $ligues = (new LigueRepository())->findAll();
 <head><meta charset="utf-8"><title>Nouvelle réservation</title></head>
 <body>
 <h1>Nouvelle réservation</h1>
-<form method="post" action="enregistrer-reservation.php">
+<form method="post" action="../page/enregistrer-reservation.php">
     <label>Date :</label><input type="date" name="date"><br><br>
     <label>Heure de début :</label><input type="time" name="heure_debut"><br><br>
     <label>Heure de fin :</label><input type="time" name="heure_fin"><br><br>
